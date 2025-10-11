@@ -65,6 +65,8 @@ async def get_agent_credentials(request: Request) -> dict[str, Any]:
     This endpoint is only accessible from internal services and provides
     the necessary credentials for AI agents to function.
     """
+    # [VERIFY_IP] Log the client IP for diagnostics
+    logger.info(f"VERIFY_IP: Received credential request from client host: {request.client.host if request.client else 'Unknown'}")
     # Check if request is from internal source
     if not is_internal_request(request):
         logger.warning(f"Unauthorized access to internal credentials from {request.client.host}")
