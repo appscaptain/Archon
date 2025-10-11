@@ -43,7 +43,10 @@ def is_internal_request(request: Request) -> bool:
             if 16 <= second_octet <= 31:
                 logger.info(f"Allowing Docker network request from {client_host}")
                 return True
-
+    # [HOTFIX] Allow requests from the 10.x.x.x range for Dokploy networking
+    if client_host.startswith("10."):
+        logger.info(f"Allowing Dokploy network request from {client_host}")
+            return True
     # Check if it's localhost
     if client_host in ["127.0.0.1", "::1", "localhost"]:
         return True
