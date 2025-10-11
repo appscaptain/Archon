@@ -109,6 +109,8 @@ services:
       retries: 3
     depends_on:
       - archon-server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
   app-network:
