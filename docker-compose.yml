@@ -114,4 +114,5 @@ services:
 
 networks:
   app-network:
-    # REMOVED: 'driver: bridge'. Swarm will use its default overlay driver.
+    driver: overlay
+    attachable: true
