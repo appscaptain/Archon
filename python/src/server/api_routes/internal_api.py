@@ -43,10 +43,7 @@ def is_internal_request(request: Request) -> bool:
             if 16 <= second_octet <= 31:
                 logger.info(f"Allowing Docker network request from {client_host}")
                 return True
-    # [HOTFIX] Allow requests from the 10.x.x.x range for Dokploy networking
-    if client_host.startswith("10."):
-        logger.info(f"Allowing Dokploy network request from {client_host}")
-            return True
+
     # Check if it's localhost
     if client_host in ["127.0.0.1", "::1", "localhost"]:
         return True
@@ -68,8 +65,6 @@ async def get_agent_credentials(request: Request) -> dict[str, Any]:
     This endpoint is only accessible from internal services and provides
     the necessary credentials for AI agents to function.
     """
-    # [VERIFY_IP] Log the client IP for diagnostics
-    logger.info(f"VERIFY_IP: Received credential request from client host: {request.client.host if request.client else 'Unknown'}")
     # Check if request is from internal source
     if not is_internal_request(request):
         logger.warning(f"Unauthorized access to internal credentials from {request.client.host}")
