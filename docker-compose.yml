@@ -4,9 +4,7 @@
 services:
   # Server Service
   archon-server:
-    image: appscaptain/archon-server:latest # MODIFIED: Use a pre-built image instead of 'build'. Replace 'appscaptain' with your Docker Hub username.
-    # REMOVED: 'container_name' is not supported in Swarm.
-    # REMOVED: 'build' section is not supported in Swarm.
+    image: appscaptain/archon-server:latest
     ports:
       - "${ARCHON_SERVER_PORT:-8181}:${ARCHON_SERVER_PORT:-8181}"
     environment:
@@ -23,7 +21,6 @@ services:
       - ARCHON_HOST=${HOST:-localhost}
     networks:
       - default
-    # REMOVED: Development-only volume mounts and '--reload' command. Code is now baked into the image.
     command:
     healthcheck:
       test:
@@ -34,8 +31,7 @@ services:
 
   # Lightweight MCP Server Service
   archon-mcp:
-    image: appscaptain/archon-mcp:latest # MODIFIED: Use a pre-built image. Replace 'appscaptain'.
-    # REMOVED: 'container_name' and 'build' section.
+    image: appscaptain/archon-mcp:latest
     ports:
       - "${ARCHON_MCP_PORT:-8051}:${ARCHON_MCP_PORT:-8051}"
     environment:
@@ -64,8 +60,7 @@ services:
 
   # AI Agents Service
   archon-agents:
-    image: appscaptain/archon-agents:latest # MODIFIED: Use a pre-built image. Replace 'appscaptain'.
-    # REMOVED: 'profiles', 'container_name', and 'build' section.
+    image: appscaptain/archon-agents:latest
     ports:
       - "${ARCHON_AGENTS_PORT:-8052}:${ARCHON_AGENTS_PORT:-8052}"
     environment:
@@ -88,8 +83,7 @@ services:
 
   # Frontend
   archon-frontend:
-    image: appscaptain/archon-frontend:latest # MODIFIED: Use a pre-built image. Replace 'appscaptain'.
-    # REMOVED: 'container_name', 'build', and development 'volumes'.
+    image: appscaptain/archon-frontend:latest
     ports:
       - "${ARCHON_UI_PORT:-3737}:3737"
     environment:
