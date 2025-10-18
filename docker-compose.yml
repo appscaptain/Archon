@@ -26,7 +26,7 @@ services:
     # REMOVED: Development-only volume mounts and '--reload' command. Code is now baked into the image.
     command:
     healthcheck:
-      test:
+      test: sh -c 'python -c "import urllib.request; urllib.request.urlopen(''http://localhost:${ARCHON_SERVER_PORT:-8181}/health'')"'
       interval: 30s
       timeout: 10s
       retries: 3
@@ -56,7 +56,7 @@ services:
     depends_on:
       - archon-server
     healthcheck:
-      test:
+      test: sh -c 'python -c "import socket; s=socket.socket(); s.connect((''localhost'', ${ARCHON_MCP_PORT:-8051})); s.close()"'
       interval: 30s
       timeout: 10s
       retries: 3
@@ -80,7 +80,7 @@ services:
     networks:
       - default
     healthcheck:
-      test:
+      test: sh -c 'python -c "import urllib.request; urllib.request.urlopen(''http://localhost:${ARCHON_AGENTS_PORT:-8052}/health'')"'
       interval: 30s
       timeout: 10s
       retries: 3
@@ -103,7 +103,7 @@ services:
     networks:
       - default
     healthcheck:
-      test:
+      test: curl -f http://localhost:3737
       interval: 30s
       timeout: 10s
       retries: 3
