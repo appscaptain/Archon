@@ -120,4 +120,3 @@ networks:
       driver: default
       config:
         - subnet: "172.16.0.0/12"
-          gateway: "172.16.0.1"
