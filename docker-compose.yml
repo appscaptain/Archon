@@ -22,11 +22,11 @@ services:
       - AGENTS_ENABLED=true
       - ARCHON_HOST=${HOST:-localhost}
     networks:
-      - app-network
+      - default
     # REMOVED: Development-only volume mounts and '--reload' command. Code is now baked into the image.
-    command: ["python", "-m", "uvicorn", "src.server.main:app", "--host", "0.0.0.0", "--port", "${ARCHON_SERVER_PORT:-8181}"]
+    command:
     healthcheck:
-      test: ["CMD", "sh", "-c", 'python -c "import urllib.request; urllib.request.urlopen(''http://localhost:${ARCHON_SERVER_PORT:-8181}/health'')"']
+      test:
       interval: 30s
       timeout: 10s
       retries: 3
@@ -52,11 +52,11 @@ services:
       - ARCHON_SERVER_PORT=${ARCHON_SERVER_PORT:-8181}
       - ARCHON_AGENTS_PORT=${ARCHON_AGENTS_PORT:-8052}
     networks:
-      - app-network
+      - default
     depends_on:
       - archon-server
     healthcheck:
-      test: ["CMD", "sh", "-c", 'python -c "import socket; s=socket.socket(); s.connect((''localhost'', ${ARCHON_MCP_PORT:-8051})); s.close()"']
+      test:
       interval: 30s
       timeout: 10s
       retries: 3
@@ -78,9 +78,9 @@ services:
       - ARCHON_AGENTS_PORT=${ARCHON_AGENTS_PORT:-8052}
       - ARCHON_SERVER_PORT=${ARCHON_SERVER_PORT:-8181}
     networks:
-      - app-network
+      - default
     healthcheck:
-      test: ["CMD", "sh", "-c", 'python -c "import urllib.request; urllib.request.urlopen(''http://localhost:${ARCHON_AGENTS_PORT:-8052}/health'')"']
+      test:
       interval: 30s
       timeout: 10s
       retries: 3
@@ -101,9 +101,9 @@ services:
       - VITE_SHOW_DEVTOOLS=${VITE_SHOW_DEVTOOLS:-false}
       - DOCKER_ENV=true
     networks:
-      - app-network
+      - default
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3737"]
+      test:
       interval: 30s
       timeout: 10s
       retries: 3
@@ -113,6 +113,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
-  app-network:
+  default:
     driver: overlay
     attachable: true
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.16.0.0/12"
+          gateway: "172.16.0.1"
